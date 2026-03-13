@@ -1,0 +1,30 @@
+package com.example.userfeedback_api.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "user_groups")
+public class UserGroup {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    public UserGroup() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
