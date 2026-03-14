@@ -30,6 +30,7 @@
 		<java.version>17</java.version>
 		<sonar.organization>univ-smb-m1-isc-2026</sonar.organization>
 		<sonar.projectKey>univ-smb-m1-isc-2026_UserFeedback-api</sonar.projectKey>
+    	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 
@@ -134,6 +135,11 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>4.0.0.4121</version>
 			</plugin>
 		</plugins>
 	</build>
