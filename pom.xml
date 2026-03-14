@@ -30,6 +30,34 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>2.20.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-migration-support</artifactId>
+			<version>5.0.0-M4</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.junit</groupId>
+			<artifactId>junit5-engine</artifactId>
+			<version>5.0.0-ALPHA</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
