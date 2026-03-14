@@ -1,6 +1,7 @@
 package com.example.userfeedback_api.service;
 
 import com.example.userfeedback_api.dto.RegisterRequest;
+import com.example.userfeedback_api.dto.LoginRequest;
 import com.example.userfeedback_api.entity.User;
 import com.example.userfeedback_api.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,16 @@ public class AuthService {
         user.setRole("USER");
 
         return userRepository.save(user);
+    }
+
+    public User login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        if (!user.getPassword().equals(request.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        return user;
     }
 }
