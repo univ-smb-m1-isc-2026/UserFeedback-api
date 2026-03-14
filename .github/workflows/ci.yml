@@ -32,7 +32,5 @@ jobs:
       - name: Donner les droits d'exécution à mvnw
         run: chmod +x mvnw
 
-      - name: Lancer les tests et l'analyse SonarCloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw clean verify sonar:sonar -Dsonar.token=${SONAR_TOKEN}
+      - name: Lancer les tests
+        run: ./mvnw clean verify
