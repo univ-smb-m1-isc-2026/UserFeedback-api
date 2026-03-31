@@ -11,6 +11,7 @@ import com.example.userfeedback_api.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VoteService {
@@ -46,22 +47,52 @@ public class VoteService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Vote vote = new Vote();
-        vote.setValue(value);
-        vote.setUser(user);
-
         if (postId != null) {
             Post post = postRepository.findById(postId)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
+
+            Optional<Vote> existingVoteOpt = voteRepository.findByUserIdAndPostId(userId, postId);
+
+            if (existingVoteOpt.isPresent()) {
+                Vote existingVote = existingVoteOpt.get();
+
+                if (existingVote.getValue().equals(value)) {
+                    voteRepository.delete(existingVote);
+                    return null;
+                }
+
+                existingVote.setValue(value);
+                return voteRepository.save(existingVote);
+            }
+
+            Vote vote = new Vote();
+            vote.setValue(value);
+            vote.setUser(user);
             vote.setPost(post);
+            return voteRepository.save(vote);
         }
 
-        if (replyId != null) {
-            Reply reply = replyRepository.findById(replyId)
-                    .orElseThrow(() -> new RuntimeException("Reply not found"));
-            vote.setReply(reply);
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("Reply not found"));
+
+        Optional<Vote> existingVoteOpt = voteRepository.findByUserIdAndReplyId(userId, replyId);
+
+        if (existingVoteOpt.isPresent()) {
+            Vote existingVote = existingVoteOpt.get();
+
+            if (existingVote.getValue().equals(value)) {
+                voteRepository.delete(existingVote);
+                return null;
+            }
+
+            existingVote.setValue(value);
+            return voteRepository.save(existingVote);
         }
 
+        Vote vote = new Vote();
+        vote.setValue(value);
+        vote.setUser(user);
+        vote.setReply(reply);
         return voteRepository.save(vote);
     }
 }
