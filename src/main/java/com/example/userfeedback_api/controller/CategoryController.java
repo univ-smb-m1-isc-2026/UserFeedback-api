@@ -1,5 +1,6 @@
 package com.example.userfeedback_api.controller;
 
+import com.example.userfeedback_api.dto.UpdateCategoryRequest;
 import com.example.userfeedback_api.entity.Category;
 import com.example.userfeedback_api.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,24 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    public Category createCategory(@RequestBody Category category, @RequestParam Long userId) {
+        return categoryService.createCategory(category, userId);
+    }
+
+    @PutMapping("/{categoryId}")
+    public Category updateCategory(@PathVariable Long categoryId,
+                                   @RequestBody UpdateCategoryRequest request) {
+        return categoryService.updateCategory(
+                categoryId,
+                request.getTitle(),
+                request.getDescription(),
+                request.getUserId()
+        );
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public void deleteCategory(@PathVariable Long categoryId,
+                              @RequestParam Long userId) {
+        categoryService.deleteCategory(categoryId, userId);
     }
 }
