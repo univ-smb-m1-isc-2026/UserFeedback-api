@@ -3,7 +3,8 @@ package com.example.userfeedback_api.dto;
 public class CreateReplyRequest {
 
     private String content;
-    private String visibility;
+    private boolean isPublic;
+    private Long groupId;
     private Long authorId;
     private Long postId;
 
@@ -18,12 +19,20 @@ public class CreateReplyRequest {
         this.content = content;
     }
 
-    public String getVisibility() {
-        return visibility;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public Long getAuthorId() {

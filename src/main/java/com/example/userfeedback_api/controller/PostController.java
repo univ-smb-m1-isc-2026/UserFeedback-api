@@ -1,6 +1,8 @@
 package com.example.userfeedback_api.controller;
 
 import com.example.userfeedback_api.dto.CreatePostRequest;
+import com.example.userfeedback_api.dto.DeletePostRequest;
+import com.example.userfeedback_api.dto.UpdatePostRequest;
 import com.example.userfeedback_api.entity.Post;
 import com.example.userfeedback_api.service.PostService;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,9 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    @GetMapping("/visible/{userId}")
+    public List<Post> getVisiblePosts(@PathVariable Long userId) {
+        return postService.getVisiblePosts(userId);
     }
 
     @PostMapping
@@ -27,9 +29,24 @@ public class PostController {
         return postService.createPost(
                 request.getTitle(),
                 request.getContent(),
-                request.getVisibility(),
                 request.getAuthorId(),
-                request.getCategoryId()
+                request.isPublic(),
+                request.getGroupId()
         );
+    }
+
+    @PutMapping("/{postId}")
+    public Post updatePost(@PathVariable Long postId, @RequestBody UpdatePostRequest request) {
+        return postService.updatePost(
+                postId,
+                request.getTitle(),
+                request.getContent(),
+                request.getUserId()
+        );
+    }
+
+    @PutMapping("/{postId}/delete")
+    public Post deletePost(@PathVariable Long postId, @RequestBody DeletePostRequest request) {
+        return postService.deletePost(postId, request.getUserId());
     }
 }

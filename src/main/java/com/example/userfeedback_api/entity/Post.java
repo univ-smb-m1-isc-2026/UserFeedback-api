@@ -17,15 +17,21 @@ public class Post {
     private String content;
 
     @Column(nullable = false)
-    private String visibility;
+    private boolean isPublic;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "group_id")
+    private UserGroup group;
+
+    @Column(nullable = false)
+    private boolean edited;
+
+    @Column(nullable = false)
+    private boolean deleted;
 
     public Post() {
     }
@@ -50,12 +56,12 @@ public class Post {
         this.content = content;
     }
 
-    public String getVisibility() {
-        return visibility;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public User getAuthor() {
@@ -66,11 +72,27 @@ public class Post {
         this.author = author;
     }
 
-    public Category getCategory() {
-        return category;
+    public UserGroup getGroup() {
+        return group;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setGroup(UserGroup group) {
+        this.group = group;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

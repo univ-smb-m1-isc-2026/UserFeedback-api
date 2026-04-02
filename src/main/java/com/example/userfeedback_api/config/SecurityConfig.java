@@ -21,6 +21,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/posts/**").permitAll()
                         .requestMatchers("/api/replies/**").permitAll()
                         .requestMatchers("/api/votes/**").permitAll()
+                        .requestMatchers("/api/groups/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

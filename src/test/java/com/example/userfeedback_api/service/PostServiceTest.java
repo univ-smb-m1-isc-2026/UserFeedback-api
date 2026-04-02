@@ -49,9 +49,8 @@ public class PostServiceTest {
         Post post = new Post();
         post.setTitle("Bouton cassé");
         post.setContent("Le bouton ne répond pas");
-        post.setVisibility("PUBLIC");
+        post.setPublic(false);
         post.setAuthor(user);
-        post.setCategory(category);
 
         when(postRepository.findAll()).thenReturn(List.of(post));
 
@@ -76,9 +75,8 @@ public class PostServiceTest {
         Post savedPost = new Post();
         savedPost.setTitle("Bouton cassé");
         savedPost.setContent("Le bouton ne répond pas");
-        savedPost.setVisibility("PUBLIC");
+        savedPost.setPublic(true);
         savedPost.setAuthor(author);
-        savedPost.setCategory(category);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(author));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
@@ -87,15 +85,13 @@ public class PostServiceTest {
         Post result = postService.createPost(
                 "Bouton cassé",
                 "Le bouton ne répond pas",
-                "PUBLIC",
-                1L,
+                true,
                 1L
         );
 
         assertEquals("Bouton cassé", result.getTitle());
-        assertEquals("PUBLIC", result.getVisibility());
+        assertEquals(true, result.isPublic());
         assertEquals("benji", result.getAuthor().getUsername());
-        assertEquals("Bug", result.getCategory().getTitle());
     }
 
     @Test
@@ -103,7 +99,7 @@ public class PostServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                postService.createPost("Titre", "Contenu", "PUBLIC", 1L, 1L)
+                postService.createPost("Titre", "Contenu", true, 1L)
         );
 
         assertEquals("Author not found", exception.getMessage());
@@ -118,7 +114,7 @@ public class PostServiceTest {
         when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                postService.createPost("Titre", "Contenu", "PUBLIC", 1L, 1L)
+                postService.createPost("Titre", "Contenu", true, 1L)
         );
 
         assertEquals("Category not found", exception.getMessage());

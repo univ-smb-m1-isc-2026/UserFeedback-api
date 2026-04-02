@@ -14,7 +14,7 @@ public class Reply {
     private String content;
 
     @Column(nullable = false)
-    private String visibility;
+    private boolean isPublic;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -23,6 +23,16 @@ public class Reply {
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private UserGroup group;
+
+    @Column(nullable = false)
+    private boolean edited;
+
+    @Column(nullable = false)
+    private boolean deleted;
 
     public Reply() {
     }
@@ -39,12 +49,12 @@ public class Reply {
         this.content = content;
     }
 
-    public String getVisibility() {
-        return visibility;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public User getAuthor() {
@@ -61,5 +71,29 @@ public class Reply {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public UserGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(UserGroup group) {
+        this.group = group;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

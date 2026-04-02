@@ -3,7 +3,13 @@ package com.example.userfeedback_api.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "votes")
+@Table(
+        name = "votes",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_vote_user_post", columnNames = {"user_id", "post_id"}),
+                @UniqueConstraint(name = "uk_vote_user_reply", columnNames = {"user_id", "reply_id"})
+        }
+)
 public class Vote {
 
     @Id

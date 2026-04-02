@@ -4,6 +4,7 @@ import com.example.userfeedback_api.entity.Post;
 import com.example.userfeedback_api.entity.Reply;
 import com.example.userfeedback_api.entity.User;
 import com.example.userfeedback_api.entity.Vote;
+import com.example.userfeedback_api.repository.GroupMembershipRepository;
 import com.example.userfeedback_api.repository.PostRepository;
 import com.example.userfeedback_api.repository.ReplyRepository;
 import com.example.userfeedback_api.repository.UserRepository;
@@ -20,15 +21,18 @@ public class VoteService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ReplyRepository replyRepository;
+    private final GroupMembershipRepository groupMembershipRepository;
 
     public VoteService(VoteRepository voteRepository,
                        UserRepository userRepository,
                        PostRepository postRepository,
-                       ReplyRepository replyRepository) {
+                       ReplyRepository replyRepository,
+                       GroupMembershipRepository groupMembershipRepository) {
         this.voteRepository = voteRepository;
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.replyRepository = replyRepository;
+        this.groupMembershipRepository = groupMembershipRepository;
     }
 
     public List<Vote> getAllVotes() {
@@ -51,6 +55,10 @@ public class VoteService {
             Post post = postRepository.findById(postId)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
 
+            if (!canUserSeePost(userId, post)) {
+                throw new RuntimeException("User cannot vote on a post they cannot access");
+            }
+
             Optional<Vote> existingVoteOpt = voteRepository.findByUserIdAndPostId(userId, postId);
 
             if (existingVoteOpt.isPresent()) {
@@ -69,11 +77,17 @@ public class VoteService {
             vote.setValue(value);
             vote.setUser(user);
             vote.setPost(post);
+            vote.setReply(null);
+
             return voteRepository.save(vote);
         }
 
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("Reply not found"));
+
+        if (!canUserSeeReply(userId, reply)) {
+            throw new RuntimeException("User cannot vote on a reply they cannot access");
+        }
 
         Optional<Vote> existingVoteOpt = voteRepository.findByUserIdAndReplyId(userId, replyId);
 
@@ -92,7 +106,59 @@ public class VoteService {
         Vote vote = new Vote();
         vote.setValue(value);
         vote.setUser(user);
+        vote.setPost(null);
         vote.setReply(reply);
+
         return voteRepository.save(vote);
+    }
+
+    private boolean canUserSeePost(Long userId, Post post) {
+        if (post.isDeleted()) {
+            return false;
+        }
+
+        if (post.isPublic()) {
+            return true;
+        }
+
+        if (post.getAuthor().getId().equals(userId)) {
+            return true;
+        }
+
+        if (post.getGroup() == null) {
+            return false;
+        }
+
+        return groupMembershipRepository
+                .findByUserIdAndGroupId(userId, post.getGroup().getId())
+                .map(membership -> membership.isActive())
+                .orElse(false);
+    }
+
+    private boolean canUserSeeReply(Long userId, Reply reply) {
+        if (reply.isDeleted()) {
+            return false;
+        }
+
+        if (!canUserSeePost(userId, reply.getPost())) {
+            return false;
+        }
+
+        if (reply.isPublic()) {
+            return true;
+        }
+
+        if (reply.getAuthor().getId().equals(userId)) {
+            return true;
+        }
+
+        if (reply.getGroup() == null) {
+            return false;
+        }
+
+        return groupMembershipRepository
+                .findByUserIdAndGroupId(userId, reply.getGroup().getId())
+                .map(membership -> membership.isActive())
+                .orElse(false);
     }
 }

@@ -4,9 +4,9 @@ public class CreatePostRequest {
 
     private String title;
     private String content;
-    private String visibility;
+    private boolean isPublic;
+    private Long groupId;
     private Long authorId;
-    private Long categoryId;
 
     public CreatePostRequest() {
     }
@@ -27,12 +27,20 @@ public class CreatePostRequest {
         this.content = content;
     }
 
-    public String getVisibility() {
-        return visibility;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public Long getAuthorId() {
@@ -41,13 +49,5 @@ public class CreatePostRequest {
 
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
     }
 }

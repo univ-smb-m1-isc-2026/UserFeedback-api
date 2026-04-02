@@ -44,7 +44,7 @@ public class ReplyServiceTest {
 
         Reply reply = new Reply();
         reply.setContent("Je confirme le bug");
-        reply.setVisibility("PUBLIC");
+        reply.setPublic(true);
         reply.setAuthor(user);
         reply.setPost(post);
 
@@ -66,7 +66,7 @@ public class ReplyServiceTest {
 
         Reply savedReply = new Reply();
         savedReply.setContent("Je confirme le bug");
-        savedReply.setVisibility("PUBLIC");
+        savedReply.setPublic(true);
         savedReply.setAuthor(author);
         savedReply.setPost(post);
 
@@ -76,13 +76,13 @@ public class ReplyServiceTest {
 
         Reply result = replyService.createReply(
                 "Je confirme le bug",
-                "PUBLIC",
+                true,
                 1L,
                 1L
         );
 
         assertEquals("Je confirme le bug", result.getContent());
-        assertEquals("PUBLIC", result.getVisibility());
+        assertEquals(true, result.isPublic());
         assertEquals("benji", result.getAuthor().getUsername());
         assertEquals("Bouton cassé", result.getPost().getTitle());
     }
@@ -92,7 +92,7 @@ public class ReplyServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                replyService.createReply("Contenu", "PUBLIC", 1L, 1L)
+                replyService.createReply("Contenu", true, 1L, 1L)
         );
 
         assertEquals("Author not found", exception.getMessage());
@@ -107,7 +107,7 @@ public class ReplyServiceTest {
         when(postRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                replyService.createReply("Contenu", "PUBLIC", 1L, 1L)
+                replyService.createReply("Contenu", true, 1L, 1L)
         );
 
         assertEquals("Post not found", exception.getMessage());
