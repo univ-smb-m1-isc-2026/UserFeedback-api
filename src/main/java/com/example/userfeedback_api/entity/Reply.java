@@ -1,5 +1,6 @@
 package com.example.userfeedback_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -49,6 +50,7 @@ public class Reply {
         this.content = content;
     }
 
+    @JsonProperty("public")
     public boolean isPublic() {
         return isPublic;
     }

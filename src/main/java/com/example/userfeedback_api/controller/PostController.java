@@ -26,6 +26,14 @@ public class PostController {
 
     @PostMapping
     public Post createPost(@RequestBody CreatePostRequest request) {
+        System.out.println("==== CREATE POST DEBUG ====");
+        System.out.println("title = " + request.getTitle());
+        System.out.println("content = " + request.getContent());
+        System.out.println("authorId = " + request.getAuthorId());
+        System.out.println("groupId = " + request.getGroupId());
+        System.out.println("categoryId = " + request.getCategoryId());
+        System.out.println("isPublic = " + request.isPublic());
+
         return postService.createPost(
                 request.getTitle(),
                 request.getContent(),

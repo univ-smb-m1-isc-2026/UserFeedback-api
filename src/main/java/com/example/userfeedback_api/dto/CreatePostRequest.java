@@ -1,10 +1,15 @@
 package com.example.userfeedback_api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CreatePostRequest {
 
     private String title;
     private String content;
-    private boolean isPublic;
+
+    @JsonProperty("isPublic")
+    private boolean publicFlag;
+
     private Long groupId;
     private Long categoryId;
     private Long authorId;
@@ -29,11 +34,12 @@ public class CreatePostRequest {
     }
 
     public boolean isPublic() {
-        return isPublic;
+        return publicFlag;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    @JsonProperty("isPublic")
+    public void setPublic(boolean publicFlag) {
+        this.publicFlag = publicFlag;
     }
 
     public Long getGroupId() {

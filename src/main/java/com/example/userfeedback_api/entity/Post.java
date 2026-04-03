@@ -1,5 +1,6 @@
 package com.example.userfeedback_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -60,6 +61,7 @@ public class Post {
         this.content = content;
     }
 
+    @JsonProperty("public")
     public boolean isPublic() {
         return isPublic;
     }

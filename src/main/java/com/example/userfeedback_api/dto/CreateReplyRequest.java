@@ -1,9 +1,14 @@
 package com.example.userfeedback_api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CreateReplyRequest {
 
     private String content;
+
+    @JsonProperty("isPublic")
     private boolean isPublic;
+
     private Long groupId;
     private Long authorId;
     private Long postId;
@@ -23,7 +28,8 @@ public class CreateReplyRequest {
         return isPublic;
     }
 
-    public void setPublic(boolean isPublic) {
+    @JsonProperty("isPublic")
+    public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
 

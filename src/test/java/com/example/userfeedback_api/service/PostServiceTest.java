@@ -4,6 +4,7 @@ import com.example.userfeedback_api.entity.GroupMembership;
 import com.example.userfeedback_api.entity.Post;
 import com.example.userfeedback_api.entity.User;
 import com.example.userfeedback_api.entity.UserGroup;
+import com.example.userfeedback_api.repository.CategoryRepository;
 import com.example.userfeedback_api.repository.GroupMembershipRepository;
 import com.example.userfeedback_api.repository.PostRepository;
 import com.example.userfeedback_api.repository.UserGroupRepository;
@@ -42,6 +43,9 @@ public class PostServiceTest {
     @Mock
     private VoteRepository voteRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @InjectMocks
     private PostService postService;
 
@@ -66,6 +70,7 @@ public class PostServiceTest {
                 "Le bouton ne répond pas",
                 1L,
                 true,
+                null,
                 null
         );
 
@@ -100,7 +105,7 @@ public class PostServiceTest {
         when(groupMembershipRepository.findByUserIdAndGroupId(1L, 2L)).thenReturn(Optional.of(membership));
         when(postRepository.save(ArgumentMatchers.any(Post.class))).thenReturn(savedPost);
 
-        Post result = postService.createPost("Privé", "Contenu privé", 1L, false, 2L);
+        Post result = postService.createPost("Privé", "Contenu privé", 1L, false, 2L, null);
 
         assertEquals("Privé", result.getTitle());
         assertEquals(false, result.isPublic());
@@ -115,7 +120,7 @@ public class PostServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(author));
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> postService.createPost("Titre", "Contenu", 1L, false, null));
+                () -> postService.createPost("Titre", "Contenu", 1L, false, null, null));
 
         assertEquals("Private post must have a group", exception.getMessage());
     }
@@ -133,7 +138,7 @@ public class PostServiceTest {
         when(groupMembershipRepository.findByUserIdAndGroupId(1L, 2L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> postService.createPost("Titre", "Contenu", 1L, false, 2L));
+                () -> postService.createPost("Titre", "Contenu", 1L, false, 2L, null));
 
         assertEquals("Author must be an active member of the group", exception.getMessage());
     }

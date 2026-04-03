@@ -70,11 +70,10 @@ public class ReplyService {
         reply.setEdited(false);
         reply.setDeleted(false);
 
-        if (!post.isPublic() && isPublic) {
-            throw new RuntimeException("A reply to a private post must also be private");
-        }
+        // Force reply to be private if post is private
+        boolean finalIsPublic = post.isPublic() ? isPublic : false;
 
-        if (!isPublic) {
+        if (!finalIsPublic) {
             if (groupId == null) {
                 throw new RuntimeException("Private reply must have a group");
             }
