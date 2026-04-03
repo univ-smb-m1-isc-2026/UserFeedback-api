@@ -16,12 +16,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/health").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/categories/**").permitAll()
-                        .requestMatchers("/api/posts/**").permitAll()
-                        .requestMatchers("/api/replies/**").permitAll()
-                        .requestMatchers("/api/votes/**").permitAll()
-                        .requestMatchers("/api/groups/**").permitAll()
+                        .requestMatchers("/api/auth", "/api/auth/**").permitAll()
+                        .requestMatchers("/api/categories", "/api/categories/**").permitAll()
+                        .requestMatchers("/api/posts", "/api/posts/**").permitAll()
+                        .requestMatchers("/api/replies", "/api/replies/**").permitAll()
+                        .requestMatchers("/api/votes", "/api/votes/**").permitAll()
+                        .requestMatchers("/api/groups", "/api/groups/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
