@@ -31,7 +31,8 @@ public class PostController {
                 request.getContent(),
                 request.getAuthorId(),
                 request.isPublic(),
-                request.getGroupId()
+                request.getGroupId(),
+                request.getCategoryId()
         );
     }
 

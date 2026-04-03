@@ -6,6 +6,7 @@ public class CreatePostRequest {
     private String content;
     private boolean isPublic;
     private Long groupId;
+    private Long categoryId;
     private Long authorId;
 
     public CreatePostRequest() {
@@ -41,6 +42,14 @@ public class CreatePostRequest {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Long getAuthorId() {

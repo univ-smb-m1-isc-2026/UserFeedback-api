@@ -1,8 +1,10 @@
 package com.example.userfeedback_api.service;
 
+import com.example.userfeedback_api.entity.Category;
 import com.example.userfeedback_api.entity.Post;
 import com.example.userfeedback_api.entity.User;
 import com.example.userfeedback_api.entity.UserGroup;
+import com.example.userfeedback_api.repository.CategoryRepository;
 import com.example.userfeedback_api.repository.GroupMembershipRepository;
 import com.example.userfeedback_api.repository.PostRepository;
 import com.example.userfeedback_api.repository.UserGroupRepository;
@@ -21,22 +23,38 @@ public class PostService {
     private final UserGroupRepository userGroupRepository;
     private final GroupMembershipRepository groupMembershipRepository;
     private final VoteRepository voteRepository;
+    private final CategoryRepository categoryRepository;
 
     public PostService(PostRepository postRepository,
                        UserRepository userRepository,
                        UserGroupRepository userGroupRepository,
                        GroupMembershipRepository groupMembershipRepository,
-                       VoteRepository voteRepository) {
+                       VoteRepository voteRepository,
+                       CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.userGroupRepository = userGroupRepository;
         this.groupMembershipRepository = groupMembershipRepository;
         this.voteRepository = voteRepository;
+        this.categoryRepository = categoryRepository;
     }
 
-    public Post createPost(String title, String content, Long authorId, boolean isPublic, Long groupId) {
+    public Post createPost(String title,
+                           String content,
+                           Long authorId,
+                           boolean isPublic,
+                           Long groupId,
+                           Long categoryId) {
         User author = userRepository.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (title == null || title.isBlank()) {
+            throw new RuntimeException("Title cannot be empty");
+        }
+
+        if (content == null || content.isBlank()) {
+            throw new RuntimeException("Content cannot be empty");
+        }
 
         Post post = new Post();
         post.setTitle(title);
@@ -45,6 +63,14 @@ public class PostService {
         post.setPublic(isPublic);
         post.setEdited(false);
         post.setDeleted(false);
+
+        if (categoryId != null) {
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            post.setCategory(category);
+        } else {
+            post.setCategory(null);
+        }
 
         if (!isPublic) {
             if (groupId == null) {

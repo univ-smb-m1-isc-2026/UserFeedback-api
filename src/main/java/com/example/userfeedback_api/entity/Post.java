@@ -27,6 +27,10 @@ public class Post {
     @JoinColumn(name = "group_id")
     private UserGroup group;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column(nullable = false)
     private boolean edited;
 
@@ -78,6 +82,14 @@ public class Post {
 
     public void setGroup(UserGroup group) {
         this.group = group;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public boolean isEdited() {
