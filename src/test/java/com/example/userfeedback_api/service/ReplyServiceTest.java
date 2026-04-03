@@ -159,7 +159,7 @@ public class ReplyServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> replyService.createReply("Contenu", true, null, 1L, 2L));
 
-        assertEquals("A reply to a private post must also be private", exception.getMessage());
+        assertEquals("Private reply must have a group", exception.getMessage());
     }
 
     @Test
